@@ -3,10 +3,10 @@
 This repository contains the implementation of a 64-bit ARM CPU with pipelining. The CPU is designed to execute the same instructions as in Project 3, with the addition of a delay slot after each load and branch instruction. The implementation also includes data forwarding logic to ensure proper data dependencies between instructions.
 
 ## Table of Contents:
-* [Introduction](https://github.com/hwangsab/EE-242-Signal-Processing-I/blob/main/README.md#introduction)
-* [Project Overview]()
-* [Installation](https://github.com/hwangsab/EE-242-Signal-Processing-I/blob/main/README.md#installation)
-* [Testing](https://github.com/hwangsab/EE-242-Signal-Processing-I/blob/main/README.md#usage)
+* [Introduction](https://github.com/hwangsab/ARM-Pipelined-CPU/blob/main/README.md#introduction)
+* [Project Overview](https://github.com/hwangsab/ARM-Pipelined-CPU/blob/main/README.md#project-overview)
+* [Installation](https://github.com/hwangsab/ARM-Pipelined-CPU/blob/main/README.md#installation)
+* [Testing](https://github.com/hwangsab/ARM-Pipelined-CPU/blob/main/README.md#testing)
 
 ## Introduction:
 The goal of this project is to design and implement a 64-bit ARM CPU with pipelining. Pipelining improves the performance of the CPU by overlapping the execution of multiple instructions. This project builds upon the previous three projects: the file register, the ALU, and the single-cycle CPU. It incorporates the fully functional components from those projects to create a complete pipelined CPU.
