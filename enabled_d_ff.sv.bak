@@ -1,0 +1,18 @@
+// Naisan Noorassa & Sabrina Hwang
+// CSE 469: Computer Architecture
+// 11/10/22
+// 
+// Module that models an enabled DFF
+
+`timescale 1ns/10ps
+
+module Enabled_D_FF (q, d, enable, reset, clk);
+	input logic d, enable, reset, clk;
+	output logic q;
+	
+	logic temp;
+	
+	mux_2_1 m (.d({d, q}), .s(enable), .y(temp));
+	
+	D_FF dff (.d(temp), .q, .reset, .clk);
+endmodule

@@ -1,0 +1,14 @@
+`timescale 1ns/10ps
+
+module dec_1_32 (d, sel, y);
+	input logic d;
+	input logic [4:0] sel;
+	output logic [31:0] y;
+	
+	logic [1:0] out;
+	
+	dec_2_1 d1 (.d(d), .sel(sel[4]), .y(out));
+	dec_4_1 d2 (.d(out[0]), .sel(sel[3:0]), .y(y[15:0]));
+	dec_4_1 d3 (.d(out[1]), .sel(sel[3:0]), .y(y[31:16]));
+	
+endmodule

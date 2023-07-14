@@ -1,0 +1,104 @@
+// Naisan Noorassa & Sabrina Hwang
+// CSE 469: Computer Architecture
+// Lab 2
+// 10/27/2022
+// 
+// Represents the top-level module responsible for carrying out functions of 
+// a simple ALU design: ADD, SUB, AND, OR, XOR, and MOV. 
+
+module alu (A, B, cntrl, result, negative, zero, overflow, carry_out);
+	input logic [63:0] A, B;	// From registers(?)
+	input logic [2:0] cntrl;		// 3-bit var to determine ALU instr
+	
+	output logic [63:0] result;
+	output logic negative, zero, overflow, carry_out;
+	
+	// 8x1 mux
+	// 000:			result = B						value of overflow and carry_out unimportant
+	// 010:			result = A + B
+	// 011:			result = A - B
+	// 100:			result = bitwise A & B		value of overflow and carry_out unimportant
+	// 101:			result = bitwise A | B		value of overflow and carry_out unimportant
+	// 110:			result = bitwise A XOR B	value of overflow and carry_out unimportant
+	
+	logic [7:0] [63:0] ALU_option;		      // Sets up 8x1 MUX
+	logic [63:0] sum;									// Temp var for storing adder result
+	
+	// ADD, SUB Logic (1-bit)
+	// 	Depending on 0-index of cntrl B will be unchanged or inverted to complete logic
+	// 		ADD => A + B
+	// 		SUB => A + ~B + 1
+	
+	fullAddSub_64 add_sub (.A(A), .B(B), .sub(cntrl[0]), .sum(sum), .carry_out);
+	
+	assign negative = sum[63];
+	CheckZero cz (.in(sum), .zero);
+	
+	assign ALU_option[2] = sum;
+	assign ALU_option[3] = sum;
+
+	genvar i;
+	generate
+		for (i = 0; i < 64; i++) begin : eachBit
+			// AND Logic
+			and and_logic (ALU_option[4][i], A[i], B[i]);
+			
+			// OR Logic
+			or or_logic (ALU_option[5][i], A[i], B[i]);
+
+			// XOR Logic
+			xor xor_logic (ALU_option[6][i], A[i], B[i]);
+			
+			// MOV Logic
+			assign ALU_option[0][i] = B[i];
+		end
+	endgenerate
+	
+	assign ALU_option[1] = {64{1'bx}};
+	assign ALU_option[7] = {64{1'bx}};
+	
+	
+	// Select between operations based on cntrl
+	mux_64_8_1 select_output (.d(ALU_option), .s(cntrl), .y(result));	
+
+endmodule 
+
+
+module ALU_driver_testbench();
+	logic A, B;
+	logic [2:0] cntrl;
+	logic [63:0] result;
+	logic negative, zero, overflow, carry_out;
+	
+	ALU_driver dut(.A, .B, .cntrl, .result, .negative, .zero, .overflow, .carry_out);		// Sets up testbench
+	
+	initial begin											// Tests all combinations of A and B
+	A = 0;	B = 0;		cntrl = 3'b000; #10;
+								cntrl = 3'b001; #10;
+								cntrl = 3'b010; #10;
+								cntrl = 3'b011; #10;
+								cntrl = 3'b100; #10;
+								cntrl = 3'b101; #10;
+								
+	A = 0;	B = 1;		cntrl = 3'b000; #10;
+								cntrl = 3'b001; #10;
+								cntrl = 3'b010; #10;
+								cntrl = 3'b011; #10;
+								cntrl = 3'b100; #10;
+								cntrl = 3'b101; #10;
+								
+	A = 1;	B = 0;		cntrl = 3'b000; #10;
+								cntrl = 3'b001; #10;
+								cntrl = 3'b010; #10;
+								cntrl = 3'b011; #10;
+								cntrl = 3'b100; #10;
+								cntrl = 3'b101; #10;
+								
+	A = 1; 	B = 1;		cntrl = 3'b000; #10;
+								cntrl = 3'b001; #10;
+								cntrl = 3'b010; #10;
+								cntrl = 3'b011; #10;
+								cntrl = 3'b100; #10;
+								cntrl = 3'b101; #10;
+	end
+endmodule 

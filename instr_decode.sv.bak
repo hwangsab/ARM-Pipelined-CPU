@@ -1,0 +1,38 @@
+// Naisan Noorassa & Sabrina Hwang
+// CSE 469: Computer Architecture
+// 11/10/22
+// 
+// Module that models the instruction decode phase of instruction execution
+
+`timescale 1ns/10ps
+
+module instr_decode (clk, rst, instr, reg2loc, WriteData);
+	input logic [31:0] instr;
+	input logic clk, rst, reg2loc;
+	input logic [63:0]	WriteData;
+	
+	logic [4:0]    Rn, Rm, Rd;
+	logic	[4:0] 	ReadRegister1, ReadRegister2, WriteRegister;
+	logic 			RegWrite, clk;
+	logic [63:0]	ReadData1, ReadData2;
+	
+	
+	assign Rn = instr[9:5];
+	assign Rm = instr[20:16];
+	assign Rd = instr[4:0];
+	
+	assign ReadRegister1 = Rn;
+	
+	// ReadRegister2 chooses between Rm and Rd
+	genvar i;
+	generate
+		for (i = 0; i < 64; i++) begin : eachMux
+			mux_2_1 m1 (.d({Rd[i], Rm[i]}), .s(reg2loc), .y(ReadRegister2));
+		end
+	endgenerate
+	
+	assign WriteRegister = Rd;
+	
+	
+	
+	regfile rf (.ReadRegister1, .ReadRegister2, .WriteRegister, .WriteData, .RegWrite, .clk, .ReadData1, .ReadData2);

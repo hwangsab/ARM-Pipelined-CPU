@@ -1,0 +1,23 @@
+module cpu(clk, rst);
+ 
+	input logic clk, rst
+	
+	// Control signals
+	logic Reg2Loc, RegWrite, SignExtend, ALUSrc,	Branch, UncondBranch,
+	      BranchLessThan, BranchReg, PCWrite;
+	
+	// NEG/OF flags
+	logic neg, overflow;
+	
+	logic [63:0] ALUOutput; // Output from ALU
+	logic [31:0] instr; // Current instruction
+	logic [63:0] pc, next_instr_pc; // PC and PC + 4
+ 
+	control_unit control_unit (.opcode(instr[31:21]) , ,Reg2Loc, ,RegWrite, ,SignExtend, ALUSrc, PCWrite, 
+	                           Branch, UncondBranch, BranchLessThan, BranchReg);
+ 
+	instr_fetch instr_fetch (clk, rst, ALUOutput, neg, overflow,
+						          Branch, UncondBranch, BranchLessThan, BranchReg, // ctrl signal inputs
+						          pc, next_instr_pc, instr);
+	
+endmodule

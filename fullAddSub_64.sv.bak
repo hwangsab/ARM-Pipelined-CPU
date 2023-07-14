@@ -1,0 +1,5 @@
+module fullAddSub_64 (A, B, sub, sum, carry_out);
+	input logic [63:0] A, B;
+	input logic sub;
+	output logic [63:0] sum;
+	output logic carry_out;

@@ -1,0 +1,13 @@
+module dec_1_2 (d, sel, y);
+	input logic d;
+	input logic sel;
+	output logic [1:0] y;
+	
+	logic n_sel;
+	
+	not #(50) n1 (sel, n_sel);
+	and #(50) a1 (d, n_sel, y[0]);
+	and #(50) a2 (d, sel,   y[1]);
+	
+endmodule
+

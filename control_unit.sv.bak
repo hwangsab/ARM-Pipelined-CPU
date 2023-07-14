@@ -1,0 +1,60 @@
+// Naisan Noorassa & Sabrina Hwang
+// CSE 469: Computer Architecture
+// 11/10/22
+// 
+// Module that models the CPU control unit
+
+`timescale 1ns/10ps
+
+module control_unit (opcode);
+	input logic [10:0] opcode;
+	
+	always_comb begin
+		if (opcode == 11'h488 || opcode == 11'h489) begin
+			// ADDI
+			
+		
+		end
+		
+		if (opcode == 11'h558) begin
+			// ADDS
+			
+		end
+	
+		if (opcode >= 11'h0A0 && opcode <= 11'h0BF) begin
+			// B
+		end
+		
+		if (opcode >= 11'h2A0 && opcode <= 11'h2A7) begin
+			// B.cond
+			
+		end
+		
+		if (opcode >= 11'h4A0 && opcode <= 1''h4BF) begin
+			// BL
+			
+		end
+		
+		if (opcode == 11'h6B0) begin
+			// BR
+		end
+		
+		if (opcode >= 11'h5A0 && opcode <= 1''h5A7) begin
+			// CBZ
+			
+		end
+		
+		if (opcode == 11'h7C2) begin
+			// LDUR
+		end
+		
+		if (opcode == 11'h7C0) begin
+			// STUR
+		end
+		
+		if (opcode == 11'h758) begin
+			// SUBS
+		end
+	end
+	
+endmodule
